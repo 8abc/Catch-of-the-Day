@@ -3,6 +3,7 @@ import Header from "./Header";
 import Order from "./Order";
 import Inventory from "./Inventory";
 import sampleFishes from "../sample-fishes";
+import Fish from "./Fish";
 
 class App extends React.Component {
   //1. Create the inital state as a property - the state of the app when the page loads
@@ -34,17 +35,43 @@ class App extends React.Component {
       fishes
     });
   };
+
   loadSampleFishes = () => {
     //the state we want to update is fishes and we want to update it with sampleFishes from line5
     this.setState({ fishes: sampleFishes });
   };
+
+  addToOrder = key => {
+    //1. take a copy of state
+    const order = { ...this.state.order };
+    //2. either add to the order, or update the number in the oder
+    order[key] = order[key] + 1 || 1;
+    //3. call setState to update our state object
+    this.setState({ order });
+  };
+
   render() {
     return (
       <div className="catch-of-the-day">
         <div className="menu">
           <Header tagline="Fresh Seafood Market" />
+          <ul className="fishes">
+            {/* Object.keys allows us to loop over every fish object */}
+            {/* .map will return a key for each fish in a p tag */}
+            {/* This renders every fish in an unordered list with a unique key*/}
+            {Object.keys(this.state.fishes).map(key => (
+              // details in the name of the prop used in Fish.js and was added to the obect
+              <Fish
+                key={key}
+                index={key}
+                details={this.state.fishes[key]}
+                addToOrder={this.addToOrder}
+              />
+            ))}
+          </ul>
         </div>
-        <Order />
+        {/* object spread takes everything from state and spread everything from state into order */}
+        <Order {...this.state} />
         {/* from AddFishForm */}
         <Inventory
           addFish={this.addFish}
