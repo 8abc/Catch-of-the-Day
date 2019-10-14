@@ -10,7 +10,7 @@ const Router = () => (
       <Route exact path="/" component={StorePicker} />
       <Route path="/store/:storeid" component={App} />
       {/* no need to put a route when for a 404 error page */}
-      <Router component={NotFound} />
+      <Route component={NotFound} />
     </Switch>
   </BrowserRouter>
 );

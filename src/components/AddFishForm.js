@@ -1,5 +1,5 @@
 import React from "react";
-
+// 2. add a ref for each value
 class AddFishForm extends React.Component {
   nameRef = React.createRef();
   priceRef = React.createRef();
@@ -8,16 +8,22 @@ class AddFishForm extends React.Component {
   imgaeRef = React.createRef();
 
   createFish = event => {
-    // stops pages from refreshing
+    // 1. stops pages from refreshing
     event.preventDefault();
+    //3. create fish
     const fish = {
       name: this.nameRef.value.value,
-      price: parseFloat(this.priceRef.value.value),
+      price: parseFloat(this.priceRef.value.value), // parseFloat stores everything in cents and never have to deal with ingtegars and decimals
       status: this.statusRef.value.value,
       desc: this.descRef.value.value,
       image: this.priceRef.value.value
     };
-    console.log(fish);
+    //comes from app.js
+    this.props.addFish(fish);
+    //refresh the form
+    //event.currentTarget is the form itself
+    //theres a reset method that lives on all forms that will clear it out
+    event.currentTarget.reset();
   };
   render() {
     return (
@@ -36,7 +42,7 @@ class AddFishForm extends React.Component {
 
         <textarea
           name="description"
-          ref={this.descriptionRef}
+          ref={this.descRef}
           placeholder="Description"
         />
         <input
