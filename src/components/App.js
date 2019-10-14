@@ -4,6 +4,7 @@ import Order from "./Order";
 import Inventory from "./Inventory";
 import sampleFishes from "../sample-fishes";
 import Fish from "./Fish";
+import base from "../base";
 
 class App extends React.Component {
   //1. Create the inital state as a property - the state of the app when the page loads
@@ -13,6 +14,20 @@ class App extends React.Component {
     fishes: {},
     order: {}
   };
+
+  componentDidMount() {
+    const { params } = this.props.match;
+    //ref in firebase is a reference to a piece of data in the databse
+    this.ref = base.syncState(`${params.storeId}/fishes`, {
+      context: this,
+      state: "fishes"
+    });
+  }
+
+  componentWillUnmount() {
+    console.log("UNMOUNTED!");
+    base.removeBinding(this.ref);
+  }
   //3. state needs to live in the same method that is updating
   //never want to go into state and modify it directly, called a mutation in javascript
   addFish = fish => {
