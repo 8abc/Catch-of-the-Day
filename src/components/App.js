@@ -15,8 +15,17 @@ class App extends React.Component {
     order: {}
   };
 
+  //hook into the very first second the app loads like onload();
   componentDidMount() {
     const { params } = this.props.match;
+    //first reinstate our localstorage
+    const localStorageRef = localStorage.getItem(params.storeId);
+    if (localStorageRef) {
+      console.log("restoring");
+      console.log(JSON.parse(localStorageRef));
+      //JSON.parse changes it from string to JSON object
+      this.setState({ order: JSON.parse(localStorageRef) });
+    }
     //ref in firebase is a reference to a piece of data in the databse
     this.ref = base.syncState(`${params.storeId}/fishes`, {
       context: this,
@@ -24,8 +33,16 @@ class App extends React.Component {
     });
   }
 
+  componentDidUpdate() {
+    console.log(this.state.order);
+    localStorage.setItem(
+      this.props.match.params.storeID,
+      JSON.stringify(this.state.order)
+    );
+  }
+  //soon as the component is unmounting from the page
   componentWillUnmount() {
-    console.log("UNMOUNTED!");
+    console.log("unmounted");
     base.removeBinding(this.ref);
   }
   //3. state needs to live in the same method that is updating
