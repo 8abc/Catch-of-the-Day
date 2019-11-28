@@ -77,6 +77,15 @@ class App extends React.Component {
     this.setState({ fishes });
   };
 
+  deleteFish = key => {
+    //1. take a copy of state
+    const fishes = { ...this.state.fishes };
+    //2. update the state
+    fishes[key] = null;
+    // 3. update state
+    this.setState({ fishes });
+  };
+
   loadSampleFishes = () => {
     //the state we want to update is fishes and we want to update it with sampleFishes from line5
     this.setState({ fishes: sampleFishes });
@@ -87,6 +96,15 @@ class App extends React.Component {
     const order = { ...this.state.order };
     //2. either add to the order, or update the number in the oder
     order[key] = order[key] + 1 || 1;
+    //3. call setState to update our state object
+    this.setState({ order });
+  };
+
+  removeFromOrder = key => {
+    //1. take a copy of state
+    const order = { ...this.state.order };
+    //2. remove that item from order
+    delete order[key];
     //3. call setState to update our state object
     this.setState({ order });
   };
@@ -112,11 +130,16 @@ class App extends React.Component {
           </ul>
         </div>
         {/* object spread takes everything from state and spread everything from state into order */}
-        <Order {...this.state} />
+        <Order
+          fishes={this.state.fishes}
+          order={this.state.order}
+          remmoveFromOrder={this.removeFromOrder}
+        />
         {/* from AddFishForm */}
         <Inventory
           addFish={this.addFish}
           updateFish={this.updateFish}
+          deleteFish={this.deleteFish}
           loadSampleFishes={this.loadSampleFishes}
           fishes={this.state.fishes}
         />
